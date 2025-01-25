@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 
-const TodoItem = ({todo}) => {
+const TodoItem = ({todo, onRemove}) => {
     const [value, setValue] = useState(todo.text);
 
     const handleChange = (e) => {
         setValue(e.target.value);
     }
-    return <input type = "text" value={value} onChange = {handleChange}/>
+
+    const handleRemove = () => {
+        onRemove(todo.id);
+    };
+
+    return(
+        <Fragment>
+            <input type="text" value={value} onChange={handleChange} />
+            <button onClick={handleRemove}>Remove</button>
+        </Fragment>
+    ) 
 }
 export const List = () => {
     const [todos, setTodos] = useState([
@@ -19,15 +29,22 @@ export const List = () => {
         setTodos([...todos].reverse());
     };
 
+    const handleRemove = (id) => {
+        console.log("Remove", id);
+        
+    }
+
     console.log(todos);
     
 
     return (
         <div>
             {todos.map((todo) =>(
-            <TodoItem key = {todo.id} todo = {todo} />  
+            <TodoItem key = {todo.id} todo = {todo} onRemove= {handleRemove}/>  
             ))}
-            <button onClick = {handleReorder}>Reorder</button>
+            <div>
+                <button onClick={handleReorder}>Reorder</button>
+            </div>
         </div>
     )
 }
